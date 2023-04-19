@@ -1,7 +1,7 @@
 import {
     ChainFactoryConfigs, ChainFactory,
     AppConfigs,
-    NftMintArgs, Chain, Web3Helper, NftInfo
+    Chain, Web3Helper, NftInfo
 } from "xp.network";
 import { config } from 'dotenv';
 config();
@@ -15,6 +15,7 @@ import {
 } from './functions';
 
 import { getNftInfo, ContractType } from "./nft_info";
+import BigNumber from "xp.network/node_modules/bignumber.js/bignumber";
 
 /**
  * Constants imported from the environment:
@@ -28,9 +29,9 @@ const contractName: string = process.env.CONTRACT_NAME!;
 /**
 * Set the Constants before running:
 */
-const nftCounter: number = 0;
+const nftCounter: number = 8;
 const uris: string[] = [
-    'https://meta.polkamon.com/meta?id=10001419693'
+    'https://meta.polkamon.com/meta?id=10001419672'
 ];
 
 /**
@@ -60,7 +61,7 @@ const selected: NftInfo<any> = getNftInfo(
 
     // Flags for running parts of the script:
     const shallMint = false;
-    const shallApprove = false;
+    const shallApprove = true;
     const shallTransfer = false;
 
     // Creation of the testnet Factory
@@ -71,13 +72,14 @@ const selected: NftInfo<any> = getNftInfo(
     const polygon = await factory.inner(Chain.POLYGON);
 
     if (shallMint) { // ======== MINTING ==============================
+        console.log(uris);
         const mintingResult = await mint(bsc, uris, originContract, factory);
     }
-
+   
     if (shallApprove) { // ==== APPROVING ============================
         const signer = new Wallet(process.env.SK!, bsc.getProvider());
-        const approved = await bsc.approveForMinter(selected, signer);
-        console.log(`Approved: ${approved}`);
+        const approved = await bsc.approveForMinter(selected, signer, new BigNumber(0));
+        console.log(`Approved: ${approved}`); 
     }
 
     if (shallTransfer) { // ==== TRANSFERRING =========================

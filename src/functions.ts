@@ -1,10 +1,12 @@
 import {
     ChainFactoryConfigs, ChainFactory,
     AppConfigs,
-    NftMintArgs, Chain, Web3Helper, NftInfo
+    MintArgs, Chain, Web3Helper, NftInfo
 } from "xp.network";
 import { config } from 'dotenv';
 config();
+
+
 
 // EVM chains compatible wallet:
 import { Wallet } from "ethers";
@@ -22,8 +24,8 @@ export const mint = async (departureChain: Web3Helper, uris: String[], contract:
             signer,
             {
                 contract,
-                uris: [uri]
-            } as NftMintArgs
+                uri: uri
+            } as MintArgs
         );
         console.log(`Done ${uri}`, nftResult);
     }
